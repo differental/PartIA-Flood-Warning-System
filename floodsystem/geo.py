@@ -24,3 +24,17 @@ def stations_by_distance(stations, p):
         output.append((station, haversine(station.coord, p)))
     output = sorted_by_key(output, 1)
     return output
+
+
+def stations_within_radius(stations, centre, r):
+    """This function calculates the distance between a list of
+    stations and filters out the ones that are further than "r"
+    from the centre coordinates "centre". Outputs a list of
+    stations after the distance filtering.
+
+    """
+    output = []
+    for station in stations:
+        if haversine(station.coord, centre) <= r:
+            output.append(station)
+    return output

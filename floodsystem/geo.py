@@ -7,9 +7,7 @@ This module contains a collection of functions related to
 geographical data.
 """
 
-from haversine import Unit, haversine
-
-from .station import MonitoringStation
+from haversine import haversine
 from .utils import sorted_by_key  # noqa
 
 

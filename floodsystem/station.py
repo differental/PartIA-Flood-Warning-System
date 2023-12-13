@@ -6,7 +6,6 @@ This module provides a model for a monitoring station, and tools
 for manipulating/modifying station data
 """
 
-
 class MonitoringStation:
     """This class represents a river level monitoring station"""
 
@@ -47,6 +46,10 @@ class MonitoringStation:
         """
         
         return not (self.typical_range == None or self.typical_range[1] < self.typical_range[0])
+    
+    def relative_water_level(self):
+        return None if (not self.typical_range_consistent()) or self.latest_level == None else (self.latest_level - self.typical_range[0]) / (self.typical_range[1] - self.typical_range[0])
+    
     
 def inconsistent_typical_range_stations(stations):
     """

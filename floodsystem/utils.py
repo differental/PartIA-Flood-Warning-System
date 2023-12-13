@@ -1,8 +1,8 @@
 # Copyright (C) 2018 Garth N. Wells
 #
 # SPDX-License-Identifier: MIT
-"""This module contains utility functions.
-
+"""
+This module contains utility functions.
 """
 
 

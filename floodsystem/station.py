@@ -1,9 +1,9 @@
 # Copyright (C) 2018 Garth N. Wells
 #
 # SPDX-License-Identifier: MIT
-"""This module provides a model for a monitoring station, and tools
+"""
+This module provides a model for a monitoring station, and tools
 for manipulating/modifying station data
-
 """
 
 
@@ -40,12 +40,20 @@ class MonitoringStation:
         return d
     
     def typical_range_consistent(self):
+        """
+        This method checks whether the typical range of a station is
+        consistent (i.e., the data exists, and the lower bound is 
+        smaller than the upper)
+        """
+        
         return not (self.typical_range == None or self.typical_range[1] < self.typical_range[0])
     
 def inconsistent_typical_range_stations(stations):
-    """Returns a list of stations with inconsistent typical ranges,
+    """
+    Returns a list of stations with inconsistent typical ranges,
     using the method typical_range_consistent.
     """
+    
     output = []
     for station in stations:
         if not station.typical_range_consistent():

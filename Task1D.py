@@ -3,6 +3,7 @@ from floodsystem.geo import rivers_with_station, stations_by_river
 
 def run():
     """Task 1D"""
+    
     stations = build_station_list()
     a = rivers_with_station(stations)
     print(str(len(a)) + " stations. First 10 - " + str(sorted(list(a))[0:10]), sep="")

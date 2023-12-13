@@ -108,9 +108,9 @@ def fetch_latest_water_level_data(use_cache=False):
 
 
 def fetch_measure_levels(measure_id, dt):
-    """Fetch measure levels from latest reading and going back a period
+    """
+    Fetch measure levels from latest reading and going back a period
     dt. Return list of dates and a list of values.
-
     """
 
     # Current time (UTC)
@@ -134,7 +134,10 @@ def fetch_measure_levels(measure_id, dt):
         d = dateutil.parser.parse(measure['dateTime'])
 
         # Append data
+        try:
+            levels.append(measure['value'])
+        except KeyError:
+            continue
         dates.append(d)
-        levels.append(measure['value'])
 
     return dates, levels

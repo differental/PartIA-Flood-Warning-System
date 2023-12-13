@@ -8,6 +8,6 @@ completed by differental.
 
 Documentation: https://cued-partia-flood-warning.readthedocs.io/
 
-/_The activity is documented at
+<!--The activity is documented at
 https://cued-partia-flood-warning.readthedocs.io/. Fork this repository
-to start the activity._/
+to start the activity.-->

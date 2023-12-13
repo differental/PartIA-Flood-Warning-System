@@ -57,3 +57,20 @@ def stations_by_river(stations):
             output[station.river] = []
         output[station.river].append(station.name)
     return output
+
+def rivers_by_station_number(stations, N):
+    rivers = rivers_with_station(stations)
+    dic = stations_by_river(stations)
+    results = []
+    for river in rivers:
+        results.append((river, len(dic[river])))
+    results = sorted_by_key(results, 1, True)
+    
+    output = []
+    for i in range(N):
+        output.append(results[i])
+    for i in range(N, len(results)):
+        if results[i][1] < results[N-1][1]:
+            break
+        output.append(results[i])
+    return output

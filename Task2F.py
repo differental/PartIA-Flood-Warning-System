@@ -23,7 +23,6 @@ def run():
         stationss.append(station)
     plot_water_level_with_fit(stationss, datess, levelss, 4)
     
-    
 if __name__ == "__main__":
     print("*** Task 2F: CUED Part IA Flood Warning System ***")
     run()

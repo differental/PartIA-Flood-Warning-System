@@ -2,8 +2,8 @@
 This module does some plotting.
 """
 
+from .analysis import polyfit
 import matplotlib.pyplot as plt
-from floodsystem.analysis import polyfit
 from matplotlib.dates import date2num
 import numpy as np
 
@@ -35,6 +35,8 @@ def plot_water_level_with_fit(stations, dates, levels, p):
         ax[i%3, i//3].plot(dates[i], [stations[i].typical_range[1] for j in range(len(dates[i]))], label = "Max Typical")
         if len(dates[i]):
             poly, d0 = polyfit(dates[i], levels[i], p)
+            if d0 == 0:
+                continue
             ax[i%3, i//3].plot(dates[i], poly(np.array(date2num(dates[i])) - d0), label = "Polyfit")
         
         #ax[i%3, i//3].xlabel('Date')

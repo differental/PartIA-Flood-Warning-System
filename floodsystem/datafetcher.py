@@ -60,6 +60,23 @@ def fetch_station_data(use_cache=True):
         pass
     cache_file = os.path.join(sub_dir, 'station_data.json')
 
+    # Implemented by bc604: Record/Read data update datetime to determine whether to update cache.
+    lines = None
+    try:
+        with open(os.path.join(sub_dir, 'station_data_last_update.txt'), 'r') as f:
+            lines = f.readlines()
+    except FileNotFoundError: # no latest update date, so don't use cache.
+        use_cache = False
+
+    if use_cache:
+        lines = lines[0]
+        if '\n' in lines:
+            lines = lines[0:-1] # removes the \n at the end
+        update_datetime = datetime.datetime.strptime(lines, '%y-%m-%d %H:%M:%S')
+        if update_datetime + datetime.timedelta(seconds=3600) < datetime.datetime.now():
+            # More than 1h old
+            use_cache = False
+
     # Attempt to load station data from file, otherwise fetch over
     # Internet
     if use_cache:
@@ -70,15 +87,19 @@ def fetch_station_data(use_cache=True):
             # If load from file fails, fetch and dump to file
             data = fetch(url)
             dump(data, cache_file)
+            with open(os.path.join(sub_dir, 'station_data_last_update.txt'), 'w') as f:
+                f.writelines(datetime.datetime.now().strftime('%y-%m-%d %H:%M:%S'))
     else:
         # Fetch and dump to file
         data = fetch(url)
         dump(data, cache_file)
+        with open(os.path.join(sub_dir, 'station_data_last_update.txt'), 'w') as f:
+            f.writelines(datetime.datetime.now().strftime('%y-%m-%d %H:%M:%S'))
 
     return data
 
 
-def fetch_latest_water_level_data(use_cache=False):
+def fetch_latest_water_level_data(use_cache=True):
     """Fetch latest levels from all 'measures'. Returns JSON object"""
 
     # URL for retrieving data
@@ -91,6 +112,23 @@ def fetch_latest_water_level_data(use_cache=False):
         pass
     cache_file = os.path.join(sub_dir, 'level_data.json')
 
+    # Implemented by bc604: Record/Read data update datetime to determine whether to update cache.
+    lines = None
+    try:
+        with open(os.path.join(sub_dir, 'level_data_last_update.txt'), 'r') as f:
+            lines = f.readlines()
+    except FileNotFoundError: # no latest update date, so don't use cache.
+        use_cache = False
+
+    if use_cache:
+        lines = lines[0]
+        if '\n' in lines:
+            lines = lines[0:-1] # removes the \n at the end
+        update_datetime = datetime.datetime.strptime(lines, '%y-%m-%d %H:%M:%S')
+        if update_datetime + datetime.timedelta(seconds=3600) < datetime.datetime.now():
+            # More than 1h old
+            use_cache = False
+
     # Attempt to load level data from file, otherwise fetch over
     # Internet
     if use_cache:
@@ -100,9 +138,13 @@ def fetch_latest_water_level_data(use_cache=False):
         except FileNotFoundError:
             data = fetch(url)
             dump(data, cache_file)
+            with open(os.path.join(sub_dir, 'level_data_last_update.txt'), 'w') as f:
+                f.writelines(datetime.datetime.now().strftime('%y-%m-%d %H:%M:%S'))
     else:
         data = fetch(url)
         dump(data, cache_file)
+        with open(os.path.join(sub_dir, 'level_data_last_update.txt'), 'w') as f:
+            f.writelines(datetime.datetime.now().strftime('%y-%m-%d %H:%M:%S'))
 
     return data
 
@@ -114,7 +156,8 @@ def fetch_measure_levels(measure_id, dt):
     """
 
     # Current time (UTC)
-    now = datetime.datetime.utcnow()
+    #now = datetime.datetime.utcnow()
+    now = datetime.datetime.now()
 
     # Start time for data
     start = now - dt
@@ -141,3 +184,54 @@ def fetch_measure_levels(measure_id, dt):
         dates.append(d)
 
     return dates, levels
+
+def fetch_official_flood(use_cache=True):
+    
+    """
+    This is like cheating lol so not actually using it in Task 2G.
+    Good to have the official flood data though.
+    """
+    
+    url = "http://environment.data.gov.uk/flood-monitoring/id/floods?min-severity=3"
+    
+    sub_dir = 'cache'
+    try:
+        os.makedirs(sub_dir)
+    except FileExistsError:
+        pass
+    cache_file = os.path.join(sub_dir, 'flood_data.json')
+    
+    lines = None
+    try:
+        with open(os.path.join(sub_dir, 'flood_data_last_update.txt'), 'r') as f:
+            lines = f.readlines()
+    except FileNotFoundError: # no latest update date, so don't use cache.
+        use_cache = False
+
+    if use_cache:
+        lines = lines[0]
+        if '\n' in lines:
+            lines = lines[0:-1] # removes the \n at the end
+        update_datetime = datetime.datetime.strptime(lines, '%y-%m-%d %H:%M:%S')
+        if update_datetime + datetime.timedelta(seconds=3600) < datetime.datetime.now():
+            # More than 1h old
+            use_cache = False
+    
+    # Attempt to load level data from file, otherwise fetch over
+    # Internet
+    if use_cache:
+        try:
+            # Attempt to load from file
+            data = load(cache_file)
+        except FileNotFoundError:
+            data = fetch(url)
+            dump(data, cache_file)
+            with open(os.path.join(sub_dir, 'flood_data_last_update.txt'), 'w') as f:
+                f.writelines(datetime.datetime.now().strftime('%y-%m-%d %H:%M:%S'))
+    else:
+        data = fetch(url)
+        dump(data, cache_file)
+        with open(os.path.join(sub_dir, 'flood_data_last_update.txt'), 'w') as f:
+            f.writelines(datetime.datetime.now().strftime('%y-%m-%d %H:%M:%S'))
+            
+    return data

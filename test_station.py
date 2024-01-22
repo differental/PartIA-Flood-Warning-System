@@ -3,8 +3,15 @@
 # SPDX-License-Identifier: MIT
 """Unit test for the station module"""
 
-from floodsystem.station import MonitoringStation
+from floodsystem.station import MonitoringStation, inconsistent_typical_range_stations
 
+FakeA = MonitoringStation("fakea", "fakemeasurea", "A", (0, 10), (-1, 100), "River A", "Town A")
+
+FakeB = MonitoringStation("fakeb", "fakemeasureb", "B", (0, 100), None, "River B", "Town B")
+
+FakeC = MonitoringStation("fakec", "fakemeasurec", "C", (0, 180), (100, -1), "River C", "Town C")
+
+FakeList = [FakeA, FakeB, FakeC]
 
 def test_create_monitoring_station():
 
@@ -25,3 +32,11 @@ def test_create_monitoring_station():
     assert s.typical_range == trange
     assert s.river == river
     assert s.town == town
+
+def test_inconsistent_typical_range_stations():
+    
+    a = inconsistent_typical_range_stations(FakeList)
+    
+    assert FakeB in a
+    assert FakeC in a
+    assert len(a) == 2

@@ -63,7 +63,7 @@ def stations_by_river(stations):
     for station in stations:
         if station.river not in output.keys():
             output[station.river] = []
-        output[station.river].append(station.name)
+        output[station.river].append(station)
     return output
 
 

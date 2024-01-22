@@ -17,10 +17,16 @@ def polyfit(dates, levels, p):
     
     datesnew = np.array(date2num(dates))
     
+    if not all(isinstance(n, (datetime.datetime)) for n in dates):
+        return 0, 0
+    
     if not all(isinstance(n, (int, float)) for n in datesnew):
         return 0, 0
     
     if not all(isinstance(n, (int, float)) for n in levels):
+        return 0, 0
+
+    if len(datesnew) != len(levels):
         return 0, 0
     
     p_coeff = np.polyfit(datesnew - np.min(datesnew), levels, p)

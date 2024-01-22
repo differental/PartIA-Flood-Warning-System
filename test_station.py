@@ -33,6 +33,12 @@ def test_create_monitoring_station():
     assert s.river == river
     assert s.town == town
 
+def test_typical_range_consistent():
+    
+    assert FakeA.typical_range_consistent()
+    assert not FakeB.typical_range_consistent()
+    assert not FakeC.typical_range_consistent()
+    
 def test_inconsistent_typical_range_stations():
     
     a = inconsistent_typical_range_stations(FakeList)
@@ -40,3 +46,14 @@ def test_inconsistent_typical_range_stations():
     assert FakeB in a
     assert FakeC in a
     assert len(a) == 2
+    
+def test_relative_water_level():
+    
+    assert not FakeB.relative_water_level()
+    assert not FakeC.relative_water_level()
+    
+    FakeA.latest_level = 100
+    assert FakeA.relative_water_level() == 1.0
+    
+    FakeA.latest_level = -1.0
+    assert FakeA.relative_water_level() == 0.0

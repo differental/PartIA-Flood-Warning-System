@@ -9,6 +9,9 @@ import numpy as np
 
 def plot_water_levels(stations, dates, levels):
     
+    if not len(stations) == len(dates) == len(levels):
+        raise IndexError
+    
     fig, ax = plt.subplots(nrows=3, ncols=2)
     for i in range(len(stations)):
         ax[i%3, i//3].plot(dates[i], levels[i], label = "Actual Data")
@@ -25,8 +28,12 @@ def plot_water_levels(stations, dates, levels):
     fig.supylabel('Water Level (m)')
     fig.suptitle('Water Levels for ' + str(len(stations)) + ' stations')
     plt.show()
+    return
 
 def plot_water_level_with_fit(stations, dates, levels, p):
+    
+    if not len(stations) == len(dates) == len(levels):
+        raise IndexError
     
     fig, ax = plt.subplots(nrows=3, ncols=2)
     for i in range(len(stations)):
@@ -50,3 +57,4 @@ def plot_water_level_with_fit(stations, dates, levels, p):
     fig.supylabel('Water Level (m)')
     fig.suptitle('Water Levels for ' + str(len(stations)) + ' stations')
     plt.show()
+    return
